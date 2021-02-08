@@ -1,19 +1,27 @@
-﻿using System;
+﻿using GeneralUse;
+using System;
 using System.Linq;
-using GeneralUse;
 
 namespace Skyblock_Economics_Calculator_Official_CLI
 {
-    class Boot
+    internal class Boot
     {
         public static void Main()
         {
             Console.WriteLine("\nSEC Release 4.0 {Feb 2021}");
             Console.WriteLine("Created by Lucifer_009");
+
+            if (FileSystems.CheckFolderExsistance(FileSystems.SETTINGS_FOLDER) == false) // Ensures a settings folder is there
+            {                                                                           // Creates one if not there
+                Display.ShowError("No main settings folder. Created one");
+                FileSystems.CreateDirectory(FileSystems.SETTINGS_FOLDER);
+            }
+
             LaunchMenu.MenuLogic();
         }
     }
-    class LaunchMenu
+
+    internal class LaunchMenu
     {
         public static void ShowMenu()
         {
@@ -36,14 +44,14 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             ShowMenu();
 
             string choice;
-            string[] possibleChoices = { "1", "2", "3", "X", "Y", "Z", "*" }; 
-            
-            while(true)
+            string[] possibleChoices = { "1", "2", "3", "X", "Y", "Z", "*" };
+
+            while (true)
             {
                 Console.WriteLine(" : Enter a menu option : ");
                 Display.ShowHeader();
                 choice = Console.ReadLine().ToUpper();
-                if(possibleChoices.Contains(choice))
+                if (possibleChoices.Contains(choice))
                 {
                     break;
                 }
@@ -52,36 +60,40 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                     Console.WriteLine("*! Invalid Response, enter an appropriate menu option !*\n");
                 }
             }
-            
 
             switch (choice)
             {
                 case "1":
 
                     break;
+
                 case "2":
 
                     break;
+
                 case "3":
 
                     break;
+
                 case "X":
 
                     break;
+
                 case "Y":
 
                     break;
+
                 case "Z":
 
                     break;
+
                 case "*":
                     break;
+
                 default:
                     Console.WriteLine("*! Error in MenuLogic !*\n");
                     break;
-                
             }
-
         }
     }
 }

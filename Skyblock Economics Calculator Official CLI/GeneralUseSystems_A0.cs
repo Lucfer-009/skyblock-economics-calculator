@@ -7,7 +7,7 @@ namespace GeneralUse
     /*
      
     Brad's Library 1.1
-    Date of Last Addition : 04/02/2021
+    Date of Last Addition : 08/02/2021
 
     */
 
@@ -101,7 +101,7 @@ namespace GeneralUse
     }
     public class Display
     {
-        public const string D_RELEASE = "1.1";
+        public const string D_RELEASE = "1.2";
 
         public static void ShowHeader()
         {
@@ -130,6 +130,10 @@ namespace GeneralUse
             neatTime = String.Format("{0} Fortnights | {1} Weeks | {2, 1} Days | {3, 2} Hours | {4, 2} Minutes | {5, 2} Seconds", fortnight, week, days, hours, minutes, seconds);
 
             return neatTime;
+        }
+        public static void ShowError(string message)
+        {
+            Console.WriteLine($"*! {message} !*\n");
         }
 
     }
