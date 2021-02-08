@@ -28,7 +28,6 @@ namespace Skyblock_Economics_Calculator_Official_CLI
 
     > *. Quit                      <
 
-
             ");
         }
 
@@ -50,7 +49,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                 }
                 else
                 {
-                    Console.WriteLine("*! Invalid Response, enter an appropriate menu option !*");
+                    Console.WriteLine("*! Invalid Response, enter an appropriate menu option !*\n");
                 }
             }
             
@@ -78,7 +77,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                 case "*":
                     break;
                 default:
-                    Console.WriteLine("*! Invalid response given, please select a valid option !*\n");
+                    Console.WriteLine("*! Error in MenuLogic !*\n");
                     break;
                 
             }
