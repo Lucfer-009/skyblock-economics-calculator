@@ -45,26 +45,6 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             return state;
         }
 
-        public static void CreateFile(string path)
-        {
-            try
-            {
-                if (CheckFileExistance(path) == false)
-                {
-                    File.Create(path);
-                    FormatFileToSettingStandard(path);
-                }
-                else
-                {
-                    Display.ShowError("File already exsists, can't create");
-                }
-            }
-            catch
-            {
-                Display.ShowError("Error in creating file");
-            }
-        }
-
         public static void CreateDirectory(string path)
         {
             try
@@ -135,23 +115,32 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             return settings;
         }
 
-        public static void FormatFileToSettingStandard(string path)
+        public static void FormatFileToSettingStandard(string path, bool ignore)
         {
             string[] baseSetting = new string[NO_OF_PRESETS];
-            if (CheckFileExistance(path) == true)
+            if(CheckFileExistance(path) == false || ignore == true)
             {
-                using (StreamWriter sw = new StreamWriter(path))
+                try
                 {
-                    for (int x = 0; x < baseSetting.Length; x++)
+                    using (StreamWriter sw = new StreamWriter(path))
                     {
-                        sw.WriteLine($"Preset Speed {x} = ");
+                        for (int x = 0; x < baseSetting.Length; x++)
+                        {
+                            sw.WriteLine($"Preset Speed {x + 1} = ");
+                        }
                     }
+
+                }
+                catch (Exception)
+                {
+                    Display.ShowError("Error in formating file to standard");
                 }
             }
-            else
+            else 
             {
-                Console.WriteLine("*! Error formating settings file !*\n");
+                Display.ShowError("File already exsists can't be created");
             }
+
         }
 
         public static int GetFileLength(string path)
@@ -159,12 +148,10 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             int length = 0;
             try
             {
-                using (StreamReader sr = new StreamReader(path))
+                using StreamReader sr = new StreamReader(path);
+                while (sr.ReadLine() != null)
                 {
-                    while (sr.ReadLine() != null)
-                    {
-                        length++;
-                    }
+                    length++;
                 }
             }
             catch (Exception)
@@ -172,6 +159,55 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                 Console.WriteLine("*! Error in reading length of file !*\n");
             }
             return length;
+        }
+
+        public static string MaterialToFilePath(string material)
+        {
+            string path = Path.Combine(SETTINGS_FOLDER, material + ".txt");
+            return path;
+        }
+
+        public static void AmmendSettingsFile(string path, string amendment, int selectionLine)
+        {
+            string line;
+            int index = 0;
+            string baseSetting;
+            int noOfLines = GetFileLength(path);
+            string[] current = new string[noOfLines];
+
+            try
+            {
+                using(StreamReader sr = new StreamReader(path))
+                {
+                    for (int x = 0; x < noOfLines; x++)
+                    {
+                        line = sr.ReadLine();
+                        index = line.IndexOf('=') + 2;
+                        baseSetting = line.Substring(0, index);
+                        if(x == selectionLine)
+                        {
+                            current[x] = baseSetting + amendment;
+                        }
+                        else
+                        {
+                            current[x] = baseSetting;
+                        }
+                    }
+                }
+                using(StreamWriter sw = new StreamWriter(path))
+                {
+                    for(int y = 0; y < noOfLines; y++)
+                    {
+                        sw.WriteLine(current[y]);
+                    }
+                }
+                
+            }
+            catch(Exception)
+            {
+                Display.ShowError("Error in ammending Settings file");
+            }
+
         }
     }
 }

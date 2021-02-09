@@ -1,5 +1,6 @@
 ﻿using GeneralUse;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace Skyblock_Economics_Calculator_Official_CLI
@@ -18,6 +19,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             }
 
             LaunchMenu.MenuLogic();
+
         }
     }
 

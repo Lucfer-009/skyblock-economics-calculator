@@ -72,7 +72,7 @@ namespace GeneralUse
 
         public static char TestIfYesOrNo(string choice)
         {
-            char state = ' ';
+            char state;
             while(true)
             {
                 Display.ShowHeader();
