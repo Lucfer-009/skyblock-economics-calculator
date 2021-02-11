@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace GeneralUse
 {
@@ -73,12 +72,12 @@ namespace GeneralUse
         public static char TestIfYesOrNo(string choice)
         {
             char state;
-            while(true)
+            while (true)
             {
                 Display.ShowHeader();
                 string response = Console.ReadLine().ToUpper();
 
-                if (response == "Y" || response == "YES") 
+                if (response == "Y" || response == "YES")
                 {
                     state = 'Y';
                     break;
@@ -92,7 +91,7 @@ namespace GeneralUse
                 {
                     Console.WriteLine("*! Invalid response given, enter either Y/N !*");
                 }
-                
+
             }
             return state;
 

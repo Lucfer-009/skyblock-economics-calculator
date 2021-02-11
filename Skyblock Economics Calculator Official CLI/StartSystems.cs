@@ -1,6 +1,5 @@
 ﻿using GeneralUse;
 using System;
-using System.IO;
 using System.Linq;
 
 namespace Skyblock_Economics_Calculator_Official_CLI
@@ -13,10 +12,12 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             Console.WriteLine("Created by Lucifer_009");
 
             if (FileSystems.CheckFolderExsistance(FileSystems.SETTINGS_FOLDER) == false) // Ensures a settings folder is there
-            {                                                                           // Creates one if not there
+            {                                                                            // Creates one if not there
                 Display.ShowError("No main settings folder. Created one");
                 FileSystems.CreateDirectory(FileSystems.SETTINGS_FOLDER);
             }
+
+            SecondaryLogic.RateCalculation(false);
 
             LaunchMenu.MenuLogic();
 

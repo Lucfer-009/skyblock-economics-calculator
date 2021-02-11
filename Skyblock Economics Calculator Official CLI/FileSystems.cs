@@ -87,28 +87,41 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             }
         }
 
-        public static string[] ReadFileToSettings(string path)
+        public static string[,] ReadFileToSettings(string path)
         {
 
             int settingsLength = GetFileLength(path);
-            string[] settings = new string[settingsLength];
+            string[,] settings = new string[settingsLength, 2];
 
             try
             {
-                using(StreamReader sr = new StreamReader(path))
+                using (StreamReader sr = new StreamReader(path))
                 {
                     int index = 0;
+                    int indexC = 0;
                     string line = "";
 
                     for (int x = 0; x < settingsLength; x++)
                     {
-                        line = sr.ReadLine();
-                        index = line.IndexOf('=') + 2;
-                        settings[x] = line.Substring(index);
+                        try
+                        {
+                            line = sr.ReadLine();
+                            index = line.IndexOf('=') + 2;
+                            indexC = line.IndexOf('#');
+                            string value = line.Substring(index, indexC - (index + 1));
+                            string comment = line.Substring(indexC + 1);
+
+                            settings[x, 0] = value;
+                            settings[x, 1] = comment;
+                        }
+                        catch (ArgumentOutOfRangeException)
+                        {
+                        }
+
                     }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 Display.ShowError("Error in Reading file to settings array");
             }
@@ -118,7 +131,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
         public static void FormatFileToSettingStandard(string path, bool ignore)
         {
             string[] baseSetting = new string[NO_OF_PRESETS];
-            if(CheckFileExistance(path) == false || ignore == true)
+            if (CheckFileExistance(path) == false || ignore == true)
             {
                 try
                 {
@@ -126,7 +139,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                     {
                         for (int x = 0; x < baseSetting.Length; x++)
                         {
-                            sw.WriteLine($"Preset Speed {x + 1} = ");
+                            sw.WriteLine($"Preset {x + 1} = ");
                         }
                     }
 
@@ -136,7 +149,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                     Display.ShowError("Error in formating file to standard");
                 }
             }
-            else 
+            else
             {
                 Display.ShowError("File already exsists can't be created");
             }
@@ -167,7 +180,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             return path;
         }
 
-        public static void AmmendSettingsFile(string path, string amendment, int selectionLine)
+        public static void AmmendSettingsFile(string path, string amendment, int selectionLine, string comment)
         {
             string line;
             int index = 0;
@@ -177,16 +190,16 @@ namespace Skyblock_Economics_Calculator_Official_CLI
 
             try
             {
-                using(StreamReader sr = new StreamReader(path))
+                using (StreamReader sr = new StreamReader(path))
                 {
                     for (int x = 0; x < noOfLines; x++)
                     {
                         line = sr.ReadLine();
                         index = line.IndexOf('=') + 2;
                         baseSetting = line.Substring(0, index);
-                        if(x == selectionLine)
+                        if (x == selectionLine)
                         {
-                            current[x] = baseSetting + amendment;
+                            current[x] = baseSetting + amendment + " #" + comment;
                         }
                         else
                         {
@@ -194,16 +207,16 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                         }
                     }
                 }
-                using(StreamWriter sw = new StreamWriter(path))
+                using (StreamWriter sw = new StreamWriter(path))
                 {
-                    for(int y = 0; y < noOfLines; y++)
+                    for (int y = 0; y < noOfLines; y++)
                     {
                         sw.WriteLine(current[y]);
                     }
                 }
-                
+
             }
-            catch(Exception)
+            catch (Exception)
             {
                 Display.ShowError("Error in ammending Settings file");
             }
