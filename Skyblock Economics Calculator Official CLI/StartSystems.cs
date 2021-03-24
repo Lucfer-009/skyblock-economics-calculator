@@ -64,11 +64,11 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             switch (choice)
             {
                 case "1":
-
+                    MainLogic.MaterialGoal();
                     break;
 
                 case "2":
-
+                    MainLogic.RateOfProduction();
                     break;
 
                 case "3":
@@ -80,16 +80,18 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                     break;
 
                 case "Z":
-
+                    MainLogic.ClearDefualts();
                     break;
 
                 case "*":
+                    Environment.Exit(1);
                     break;
 
                 default:
                     Console.WriteLine("*! Error in MenuLogic !*\n");
                     break;
             }
+            MenuLogic();
         }
     }
 }

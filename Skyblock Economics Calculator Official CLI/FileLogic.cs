@@ -64,7 +64,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             }
         }
 
-        public static void DeleteFileOrDir(string path)
+        public static void DeleteFile(string path)
         {
             try
             {
@@ -72,18 +72,32 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                 {
                     File.Delete(path);
                 }
-                else if (Directory.Exists(path))
-                {
-                    Directory.Delete(path);
-                }
                 else
                 {
-                    Console.WriteLine("!* No File or Directory in the given path to delete *!");
+                    Console.WriteLine("!* No File in the given path to delete *!");
                 }
             }
             catch (Exception)
             {
-                Console.WriteLine("*! Error in Clearing the file or Directory !*");
+                Console.WriteLine("*! Error in clearing the file !*");
+            }
+        }
+        public static void DeleteDir(string path)
+        {
+            try
+            {
+                if(Directory.Exists(path))
+                {
+                    Directory.Delete(path, true);
+                }
+                else
+                {
+                    Display.ShowError("No folder to delete");
+                }
+            }
+            catch(Exception)
+            {
+                Display.ShowError("Error in deleting folder");
             }
         }
 

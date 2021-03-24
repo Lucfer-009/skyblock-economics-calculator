@@ -186,13 +186,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
 
         public static void FormatGenerationToConsole(double rate, double tradePrice, string material)
         {
-            double currentPricing = 0;
-            double stackRate = 0;
-            double enchantedV1Rate = 0;
-            double enchantedV2Rate = 0;
-            double doubleChest = 0;
-            double enchantedV1RateStack = 0;
-            double enchantedV2RateStack = 0;
+            double currentPricing, stackRate, enchantedV1Rate, enchantedV2Rate, doubleChest, enchantedV1RateStack, enchantedV2RateStack = 0;
 
             string[] timePeriod = { "Second", "Minute", "Hour", "12-Hour", "Day", "Week", "Fortnight", "Year" };
             int[] timeMultiplication = { 1, 60, 60, 12, 2, 7, 4, 13 };
@@ -212,7 +206,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                 enchantedV2RateStack = enchantedV2Rate / 64;
 
                 Console.WriteLine($"-- -- PER {timePeriod[x]} -- --");
-                Console.WriteLine(String.Format(" # {0,19:N2} BASE rate             | @ {1,19:N2} STACK(S)               |", rate, stackRate));
+                Console.WriteLine(String.Format(" # {0,19:N2} BASE RATE             | @ {1,19:N2} STACK(S)               |", rate, stackRate));
                 Console.WriteLine(String.Format(" $ {0,19:N2} COINS                 | / {1,19:N2} DOUBLE CHEST(S)        |", currentPricing, doubleChest));
                 Console.WriteLine(String.Format(" ~ {0,19:N2} ENCHANTED V1          | ~ {1,19:N2} ENCHANTED V2           |", enchantedV1Rate, enchantedV2Rate));
                 Console.WriteLine(String.Format(" ~ {0,19:N2} ENCHANTED V1 STACK(S) | ~ {1,19:N2} ENCHANTED V2 STACK(S)  |", enchantedV1RateStack, enchantedV2RateStack));

@@ -126,7 +126,7 @@ namespace GeneralUse
             int minutes = seconds / 60;
             seconds %= 60;
 
-            neatTime = String.Format("{0} Fortnights | {1} Weeks | {2, 1} Days | {3, 2} Hours | {4, 2} Minutes | {5, 2} Seconds", fortnight, week, days, hours, minutes, seconds);
+            neatTime = String.Format("{0} Fortnight(s) | {1} Weeks | {2, 1} Days | {3, 2} Hours | {4, 2} Minutes | {5, 2} Seconds", fortnight, week, days, hours, minutes, seconds);
 
             return neatTime;
         }
