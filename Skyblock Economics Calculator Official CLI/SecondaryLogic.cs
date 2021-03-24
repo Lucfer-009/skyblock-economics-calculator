@@ -8,22 +8,27 @@ namespace Skyblock_Economics_Calculator_Official_CLI
     class SecondaryLogic
     {
 
-        public static double loadMinionSave()
+        public static double loadMinionSave(bool Write, string material)
         {
 
             string path;
             while(true)
             {
-                Console.WriteLine(" : Enter name of material to load defaults for : ");
-                Display.ShowHeader();
 
-                string material = Console.ReadLine();
+                if (material == null)
+                {
+                    Console.WriteLine(" : Enter name of material to load defaults for : ");
+                    Display.ShowHeader();
+                    material = Console.ReadLine();
+                }
+                
 
                 path = FileLogic.MaterialToFilePath(material);
 
                 if (FileLogic.CheckFileExistance(path) == false)
                 {
-                    Display.ShowError("No file in exsistance to load");
+                    Display.ShowError("CRITICAL ERROR - No file in exsistance to load");
+                    MainLogic.SetDefaultSpeed(material);
                 }
                 else
                 {
@@ -31,7 +36,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                 }
             }
 
-            int option = GetSlot(path, false);
+            int option = GetSlot(path, Write);
 
             string[,] settings = FileLogic.ReadFileToSettings(path);
             double speedSelected = Convert.ToDouble(settings[option-1, 0]);
@@ -89,7 +94,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             }
             return option;
         }
-        public static double RateCalculation(bool skipCheck)
+        public static double RateCalculation(bool skipCheck, string material)
         {
             bool emptySettingsFolder = !Directory.EnumerateFiles(FileLogic.SETTINGS_FOLDER).Any();
             bool selectionSkip = false;
@@ -108,7 +113,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                     {
                         if(choice == "y" || choice == "yes")
                         {
-                            overallGenSpeed = loadMinionSave();
+                            overallGenSpeed = loadMinionSave(false, material);
                             check = true;
                             break;
                         }
@@ -179,7 +184,41 @@ namespace Skyblock_Economics_Calculator_Official_CLI
 
         }
 
+        public static void FormatGenerationToConsole(double rate, double tradePrice, string material)
+        {
+            double currentPricing = 0;
+            double stackRate = 0;
+            double enchantedV1Rate = 0;
+            double enchantedV2Rate = 0;
+            double doubleChest = 0;
+            double enchantedV1RateStack = 0;
+            double enchantedV2RateStack = 0;
 
+            string[] timePeriod = { "Second", "Minute", "Hour", "12-Hour", "Day", "Week", "Fortnight", "Year" };
+            int[] timeMultiplication = { 1, 60, 60, 12, 2, 7, 4, 13 };
+
+
+            for (int x = 0; x < timePeriod.Length; x++)
+            {
+                rate *= timeMultiplication[x];
+                currentPricing = tradePrice * rate;
+                stackRate = rate / 64;
+                doubleChest = stackRate / 54;
+
+                enchantedV1Rate = stackRate / 2.5;
+                enchantedV1RateStack = enchantedV1Rate / 64;
+
+                enchantedV2Rate = enchantedV1RateStack / 2.5;
+                enchantedV2RateStack = enchantedV2Rate / 64;
+
+                Console.WriteLine($"-- -- PER {timePeriod[x]} -- --");
+                Console.WriteLine(String.Format(" # {0,19:N2} BASE rate             | @ {1,19:N2} STACK(S)               |", rate, stackRate));
+                Console.WriteLine(String.Format(" $ {0,19:N2} COINS                 | / {1,19:N2} DOUBLE CHEST(S)        |", currentPricing, doubleChest));
+                Console.WriteLine(String.Format(" ~ {0,19:N2} ENCHANTED V1          | ~ {1,19:N2} ENCHANTED V2           |", enchantedV1Rate, enchantedV2Rate));
+                Console.WriteLine(String.Format(" ~ {0,19:N2} ENCHANTED V1 STACK(S) | ~ {1,19:N2} ENCHANTED V2 STACK(S)  |", enchantedV1RateStack, enchantedV2RateStack));
+                Console.WriteLine();
+            }
+        }
 
     }
 }

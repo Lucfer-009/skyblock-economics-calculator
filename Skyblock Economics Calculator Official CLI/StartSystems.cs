@@ -72,11 +72,11 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                     break;
 
                 case "3":
-
+                    MainLogic.MarginalGain();
                     break;
 
                 case "Y":
-                    MainLogic.SetDefaultSpeed();
+                    MainLogic.SetDefaultSpeed(null);
                     break;
 
                 case "Z":
