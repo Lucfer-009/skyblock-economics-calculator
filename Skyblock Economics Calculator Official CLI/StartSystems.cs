@@ -11,13 +11,11 @@ namespace Skyblock_Economics_Calculator_Official_CLI
             Console.WriteLine("\nSEC Release 4.0 {Feb 2021}");
             Console.WriteLine("Created by Lucifer_009");
 
-            if (FileSystems.CheckFolderExsistance(FileSystems.SETTINGS_FOLDER) == false) // Ensures a settings folder is there
+            if (FileLogic.CheckFolderExsistance(FileLogic.SETTINGS_FOLDER) == false) // Ensures a settings folder is there
             {                                                                            // Creates one if not there
                 Display.ShowError("No main settings folder. Created one");
-                FileSystems.CreateDirectory(FileSystems.SETTINGS_FOLDER);
+                FileLogic.CreateDirectory(FileLogic.SETTINGS_FOLDER);
             }
-
-            SecondaryLogic.RateCalculation(false);
 
             LaunchMenu.MenuLogic();
 
@@ -33,8 +31,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
     > 2. Rate of Production        <
     > 3. Marginal Gain             <
 
-    > X. Set Default Material      <
-    > Y. Set Default Minion Setup  <
+    > Y. Save Minion Setups        <
     > Z. Clear Defaults            <
 
     > *. Quit                      <
@@ -78,12 +75,8 @@ namespace Skyblock_Economics_Calculator_Official_CLI
 
                     break;
 
-                case "X":
-
-                    break;
-
                 case "Y":
-
+                    MainLogic.SetDefaultSpeed();
                     break;
 
                 case "Z":

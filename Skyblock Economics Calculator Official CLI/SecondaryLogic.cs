@@ -19,9 +19,9 @@ namespace Skyblock_Economics_Calculator_Official_CLI
 
                 string material = Console.ReadLine();
 
-                path = FileSystems.MaterialToFilePath(material);
+                path = FileLogic.MaterialToFilePath(material);
 
-                if (FileSystems.CheckFileExistance(path) == false)
+                if (FileLogic.CheckFileExistance(path) == false)
                 {
                     Display.ShowError("No file in exsistance to load");
                 }
@@ -31,42 +31,54 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                 }
             }
 
-            string[,] settings = FileSystems.ReadFileToSettings(path);
+            int option = GetSlot(path, false);
+
+            string[,] settings = FileLogic.ReadFileToSettings(path);
+            double speedSelected = Convert.ToDouble(settings[option-1, 0]);
+            return speedSelected;
+
+
+        }
+        public static int GetSlot(string path, bool overwrite)
+        {
+            string[,] settings = FileLogic.ReadFileToSettings(path);
+            bool EmptyPreset = true;
 
             Console.WriteLine("--- --- ---");
-            for(int x = 0; x < settings.Length; x++)
+            for (int x = 0; x < settings.Length; x++)
             {
                 try
                 {
-                    if(settings[x, 0] == null)
+                    if (settings[x, 0] == null)
                     {
-                        Console.WriteLine(@$"Preset {x+1} : \EMPTY\");
+                        Console.WriteLine(@$"Preset {x + 1} : \EMPTY\");
                     }
                     else
                     {
                         Console.WriteLine($"Preset {x + 1} : {settings[x, 0]} | {settings[x, 1]}");
+                        EmptyPreset = false;
                     }
-                    
+
                 }
-                catch(IndexOutOfRangeException)
+                catch (IndexOutOfRangeException)
                 {
                     break;
                 }
-                
+
             }
             Console.WriteLine("--- --- ---");
 
             int option;
-            while(true)
+            while (true)
             {
                 Console.WriteLine(" : Enter the preset number you'd like to select : ");
                 Display.ShowHeader();
                 option = Input.GetInt();
-                if(option < 1 || option > settings.Length)
+                if (option < 1 || option > settings.Length && EmptyPreset == false)
                 {
                     Display.ShowError("Entered an invalid response, number chosen outside the presets shown");
                 }
-                else if(settings[option-1, 0] == null)
+                else if (EmptyPreset == true && overwrite == false)
                 {
                     Display.ShowError("There is nothing saved into that preset");
                 }
@@ -75,15 +87,11 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                     break;
                 }
             }
-
-            double speedSelected = Convert.ToDouble(settings[option-1, 0]);
-            return speedSelected;
-
-
+            return option;
         }
         public static double RateCalculation(bool skipCheck)
         {
-            bool emptySettingsFolder = !Directory.EnumerateFiles(FileSystems.SETTINGS_FOLDER).Any();
+            bool emptySettingsFolder = !Directory.EnumerateFiles(FileLogic.SETTINGS_FOLDER).Any();
             bool selectionSkip = false;
             bool check = false;
             double overallGenSpeed = 0.0;
@@ -128,29 +136,34 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                 Display.ShowHeader();
                 double noOfMinion = Input.GetDouble();
 
-                Console.WriteLine(" : Are all minion speeds the same? [Y/N] : ");
-                Display.ShowHeader();
-                string choice = Console.ReadLine();
-
-                if (choice == "y" || choice == "yes")
+                while(true)
                 {
-                    Console.WriteLine(" : How long in seconds to produce one of the desired material : ");
+                    Console.WriteLine(" : Are all minion speeds the same? [Y/N] : ");
                     Display.ShowHeader();
-                    overallGenSpeed = (1 / Input.GetDouble()) * noOfMinion;
-                }
-                else if (choice == "n" || choice == "no")
-                {
-                    Console.WriteLine(" : How long in seconds to produce of of the desired material for the asked minion : ");
-                    for (int x = 0; x < noOfMinion; x++)
-                    {
-                        Console.Write($" : Minion No {x + 1} : ");
-                        overallGenSpeed += 1 / Input.GetDouble();
-                    }
+                    string choice = Console.ReadLine().ToLower();
 
-                }
-                else
-                {
-                    Console.WriteLine("*! Please enter a valid response, either y/ n !*\n");
+                    if (choice == "y" || choice == "yes")
+                    {
+                        Console.WriteLine(" : How long in seconds to produce one of the desired material : ");
+                        Display.ShowHeader();
+                        overallGenSpeed = (1 / Input.GetDouble()) * noOfMinion;
+                        break;
+                    }
+                    else if (choice == "n" || choice == "no")
+                    {
+                        Console.WriteLine(" : How long in seconds to produce of of the desired material for the asked minion : ");
+                        for (int x = 0; x < noOfMinion; x++)
+                        {
+                            Console.Write($" : Minion No {x + 1} : ");
+                            overallGenSpeed += 1 / Input.GetDouble();
+                        }
+                        break;
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("*! Please enter a valid response, either y/ n !*\n");
+                    }
                 }
 
                 Console.WriteLine(" : Enter the percentage cost / loss of generation if present, else type 0 : ");

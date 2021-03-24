@@ -5,11 +5,11 @@ using System.Reflection;
 
 namespace Skyblock_Economics_Calculator_Official_CLI
 {
-    internal class FileSystems
+    internal class FileLogic
     {
         public static string MAIN_DIRECTORY = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         public static string SETTINGS_FOLDER = Path.Combine(MAIN_DIRECTORY, "settings");
-        public static int NO_OF_PRESETS = 8;
+        public static int NO_OF_PRESETS = 12;
 
         public static bool CheckFileExistance(string path)
         {
@@ -203,7 +203,7 @@ namespace Skyblock_Economics_Calculator_Official_CLI
                         }
                         else
                         {
-                            current[x] = baseSetting;
+                            current[x] = line;
                         }
                     }
                 }
